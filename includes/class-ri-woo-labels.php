@@ -48,6 +48,7 @@ if ( ! class_exists( 'Ri_Woo_Labels' ) ) {
 
 		private function includes() {
 			require_once RI_WOO_LABELS_PLUGIN_DIRNAME . 'includes/class-custom-post-type.php';
+			require_once RI_WOO_LABELS_PLUGIN_DIRNAME . 'includes/class-cpt-meta-box.php';
 			require_once RI_WOO_LABELS_PLUGIN_DIRNAME . 'includes/class-admin-menu.php';
 		}
 
@@ -65,6 +66,7 @@ if ( ! class_exists( 'Ri_Woo_Labels' ) ) {
 		public function on_plugins_loaded() {
 
 			new Ri_WL_Custom_Post_Type();
+			new Ri_WL_CPT_Meta_Box();
 
 			if ( current_user_can( 'manage_options' ) ) {
 				new Ri_WL_Admin_Menu();
