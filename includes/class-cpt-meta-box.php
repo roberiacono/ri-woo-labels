@@ -18,7 +18,9 @@ if ( ! class_exists( 'Ri_WL_CPT_Meta_Box' ) ) {
 		}
 
 		public function meta_box() {
-			echo 'Foo';
+			$default_values = new Ri_WL_CPT_Values();
+			
+			print_r( $default_values->get_default_values() );
 		}
 	}
 }

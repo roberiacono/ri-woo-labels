@@ -48,6 +48,7 @@ if ( ! class_exists( 'Ri_Woo_Labels' ) ) {
 
 		private function includes() {
 			require_once RI_WOO_LABELS_PLUGIN_DIRNAME . 'includes/class-custom-post-type.php';
+			require_once RI_WOO_LABELS_PLUGIN_DIRNAME . 'includes/class-cpt-values.php';
 			require_once RI_WOO_LABELS_PLUGIN_DIRNAME . 'includes/class-cpt-meta-box.php';
 			require_once RI_WOO_LABELS_PLUGIN_DIRNAME . 'includes/class-admin-menu.php';
 		}
