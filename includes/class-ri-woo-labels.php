@@ -55,6 +55,7 @@ if ( ! class_exists( 'Ri_Woo_Labels' ) ) {
 			require_once RI_WOO_LABELS_PLUGIN_DIRNAME . 'includes/class-admin-menu.php';
 			require_once RI_WOO_LABELS_PLUGIN_DIRNAME . 'includes/class-label-view.php';
 			require_once RI_WOO_LABELS_PLUGIN_DIRNAME . 'includes/class-label-display.php';
+			require_once RI_WOO_LABELS_PLUGIN_DIRNAME . 'includes/class-woo-image-wrapper.php';
 		}
 
 		private function init_hooks() {
@@ -72,6 +73,7 @@ if ( ! class_exists( 'Ri_Woo_Labels' ) ) {
 
 			new Ri_WL_Custom_Post_Type();
 			new Ri_WL_Label_Display();
+			new Ri_WL_Woo_Image_Wrapper();
 
 			if ( current_user_can( 'manage_options' ) ) {
 				new Ri_WL_Admin_Menu();
