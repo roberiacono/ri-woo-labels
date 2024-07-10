@@ -6,7 +6,7 @@ if ( ! class_exists( 'Ri_WL_Label_View' ) ) {
 	class Ri_WL_Label_View {
 
 		public function get_html( $label_id ) {
-			$text  = 'Label ' . $label_id;
+			$text  = get_post_meta( $label_id, '_ri_wl_label_setting_text', true );
 			$style = $this->get_style( $label_id );
 			$html  = '<div class="" style="' . esc_attr( $style ) . '">' . $text . '</div>';
 			return $html;

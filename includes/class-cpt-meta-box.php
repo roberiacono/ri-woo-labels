@@ -73,8 +73,14 @@ if ( ! class_exists( 'Ri_WL_CPT_Meta_Box' ) ) {
 
 			$meta_box_settings = Ri_WL_CPT_Values::get_meta_box_settings_values();
 			foreach ( $meta_box_settings as $key => $value ) {
-				if ( isset( $_POST[ $key ] ) && array_key_exists( $_POST[ $key ], $value['options'] ) ) { // validation
-					update_post_meta( $post_id, '_' . $key, $_POST[ $key ] );
+				if ( $value ['type'] === 'select' || $value ['type'] === 'radio' ) {
+					if ( isset( $_POST[ $key ] ) && array_key_exists( $_POST[ $key ], $value['options'] ) ) { // validation
+						update_post_meta( $post_id, '_' . $key, $_POST[ $key ] );
+					}
+				} elseif ( $value ['type'] === 'text' ) {
+					if ( isset( $_POST[ $key ] ) && sanitize_text_field( $_POST[ $key ] ) ) { // validation
+						update_post_meta( $post_id, '_' . $key, $_POST[ $key ] );
+					}
 				}
 			}
 

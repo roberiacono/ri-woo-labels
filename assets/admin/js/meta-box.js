@@ -93,4 +93,18 @@ jQuery(document).ready(function ($) {
     );
     counter++;
   }
+
+  /* settings section */
+  $(document).on(
+    "change",
+    "select[name='ri_wl_label_setting_where']",
+    function () {
+      const selected = $(this).val();
+      if (selected === "before_title") {
+        $(".form-field.ri_wl_label_setting_position").hide();
+      } else {
+        $(".form-field.ri_wl_label_setting_position").show();
+      }
+    }
+  );
 });
