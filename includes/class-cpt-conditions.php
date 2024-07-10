@@ -12,8 +12,7 @@ if ( ! class_exists( 'Ri_WL_CPT_Conditions' ) ) {
 				'is_on_sale'       => array(
 					'label'   => __( 'Is On Sale', 'ri-woo-labels' ),
 					'compare' => array(
-						'equal'     => __( 'Equal', 'ri-woo-labels' ),
-						'not-equal' => __( 'Not Equal', 'ri-woo-labels' ),
+						'equal' => __( 'Equal', 'ri-woo-labels' ),
 					),
 					'values'  => array(
 						'yes' => __( 'Yes', 'ri-woo-labels' ),
@@ -30,6 +29,12 @@ if ( ! class_exists( 'Ri_WL_CPT_Conditions' ) ) {
 				),
 			);
 
+			return $conditions;
+		}
+
+		public static function get_label_conditions( $post_id ) {
+			$conditions = get_post_meta( $post_id, '_ri_woo_labels_conditions', true );
+			$conditions = maybe_unserialize( $conditions );
 			return $conditions;
 		}
 
@@ -63,7 +68,7 @@ if ( ! class_exists( 'Ri_WL_CPT_Conditions' ) ) {
 			$categories     = array();
 
 			foreach ( $all_categories as $cat ) {
-				$categories[ $cat->term_id ] = $cat->name;
+				$categories[ $cat->slug ] = $cat->name;
 			}
 
 			return $categories;

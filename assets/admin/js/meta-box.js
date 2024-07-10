@@ -1,13 +1,13 @@
 jQuery(document).ready(function ($) {
-  console.log("debug ", ri_woo_labels_meta_box_scripts.conditions);
   const defaultConditions = ri_woo_labels_meta_box_scripts.conditions;
+  console.log("defaultConditions ", defaultConditions);
   let counter = $("#conditions-wrapper .conditions-wrapper__row").length;
   console.log("Found " + counter + " conditions");
   $("#add-new-condition").on("click", function () {
     addNewCondition();
   });
   $(document).on("click", ".remove-condition", function () {
-    $(this).parent(".conditions-wrapper__row").remove();
+    $(this).closest(".conditions-wrapper__row").remove();
   });
 
   $(document).on("change", ".select-type", function () {
@@ -54,37 +54,43 @@ jQuery(document).ready(function ($) {
         </option>`;
     });
 
+    let relation = "";
+    if (counter > 0) {
+      relation = '<div class="relation">AND</div>';
+    }
+
     $("#conditions-wrapper").append(
       `
             <div class="conditions-wrapper__row">
-                <div class="conditions-wrapper__row__inner" >
-                    <select name="conditions[` +
+                ` +
+        relation +
+        `
+                <div class="conditions-wrapper__row__inner-wrapper">
+                    <div class="conditions-wrapper__row__inner" >
+                        <select name="conditions[` +
         counter +
         `][type]" class="select-type" >
-        <option value="null">Select</option>
-        ` +
+            <option value="null">Select</option>
+            ` +
         typeOptions +
         `     
-                    </select>
-                    <select name="conditions[` +
+                        </select>
+                        <select name="conditions[` +
         counter +
         `][compare]"  class="select-compare">
-                    </select>
-                    <select name="conditions[` +
+                        </select>
+                        <select name="conditions[` +
         counter +
         `][value]" class="select-values">
-                    </select>
-                </div>
-                <button type="button" class="remove-condition button btn">` +
+                        </select>
+                    </div>
+                    <button type="button" class="remove-condition button btn">` +
         ri_woo_labels_meta_box_scripts.removeButtonText +
         `</button>
-                
+                </div>
             </div>
         `
     );
     counter++;
   }
-  /*  if (counter === 0) {
-    addNewCondition();
-  } */
 });

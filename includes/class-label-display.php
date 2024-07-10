@@ -21,12 +21,51 @@ if ( ! class_exists( 'Ri_WL_Label_Display' ) ) {
 				print_r( $label_id );
 				$type = get_post_meta( $label_id, '_type_meta_key', true );
 				// echo $type;
+				$label_conditions = Ri_WL_CPT_Conditions::get_label_conditions( $label_id );
 
-				if ( $product->is_on_sale() && $type === 'sale' ) {
+				if ( $this->should_display_label_for_this_product( $label_conditions, $label_id ) ) {
 					array_push( $pruduct_labels, $view->get_html( $label_id ) );
 				}
+
 				return $pruduct_labels;
 			}
+		}
+
+		public function should_display_label_for_this_product( $label_conditions, $label_id ) {
+			global $product;
+			$product_id = $product->get_id();
+
+			$should_display_label_for_this_product = true;
+			foreach ( $label_conditions as $condition ) {
+
+				if ( ! $should_display_label_for_this_product ) {
+					return $should_display_label_for_this_product;
+				}
+
+				switch ( $condition['type'] ) {
+					case 'is_on_sale':
+						if ( $condition['compare'] === 'equal' ) {
+							if ( $condition['value'] === 'yes' && ! $product->is_on_sale() ) {
+								$should_display_label_for_this_product = false;
+							} elseif ( $condition['value'] === 'no' && $product->is_on_sale() ) {
+								$should_display_label_for_this_product = false;
+							}
+						}
+						break;
+					case 'product_category':
+						if ( $condition['compare'] === 'equal' ) {
+							if ( ! has_term( $condition['value'], 'product_cat', $product_id ) ) {
+								$should_display_label_for_this_product = false;
+							}
+						} elseif ( $condition['compare'] === 'not-equal' ) {
+							if ( has_term( $condition['value'], 'product_cat', $product_id ) ) {
+								$should_display_label_for_this_product = false;
+							}
+						}
+						break;
+				}
+			}
+			return $should_display_label_for_this_product;
 		}
 
 

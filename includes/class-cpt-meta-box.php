@@ -76,6 +76,13 @@ if ( ! class_exists( 'Ri_WL_CPT_Meta_Box' ) ) {
 			}
 
 			if ( isset( $_POST['conditions'] ) ) {
+				// avoid empty conditions
+				foreach ( $_POST['conditions'] as $key => $value ) {
+					if ( $value['type'] === 'null' ) {
+						unset( $_POST['conditions'][ $key ] );
+					}
+				}
+
 				update_post_meta( $post_id, '_ri_woo_labels_conditions', maybe_serialize( $_POST['conditions'] ) ); // TODO: sanitize $_POST['conditions'] checking in array of default conditions
 			} else {
 				delete_post_meta( $post_id, '_ri_woo_labels_conditions' );
