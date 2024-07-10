@@ -8,9 +8,10 @@ if ( ! class_exists( 'Ri_WL_Label_Display' ) ) {
 		public function __construct() {
 			// add_action( 'woocommerce_before_shop_loop_item_title', array( $this, 'display_label_before_title' ) );
 			add_action( 'woocommerce_before_shop_loop_item_title', array( $this, 'display_label_on_image' ) );
+			add_action( 'woocommerce_before_shop_loop_item_title', array( $this, 'display_label_before_title' ) );
 		}
 
-		public function get_product_labels( $product_id ) {
+		public function get_product_labels( $product_id, $where_to_display ) {
 			global $product;
 			$view       = new Ri_WL_Label_View();
 			$labels_ids = Ri_WL_Helpers::get_all_labels();
@@ -18,17 +19,18 @@ if ( ! class_exists( 'Ri_WL_Label_Display' ) ) {
 			$pruduct_labels = array();
 
 			foreach ( $labels_ids as $label_id ) {
-				print_r( $label_id );
-				$type = get_post_meta( $label_id, '_type_meta_key', true );
-				// echo $type;
+
+				if ( $where_to_display !== get_post_meta( $label_id, '_ri_wl_label_setting_where', true ) ) {
+					continue;
+				}
+
 				$label_conditions = Ri_WL_CPT_Conditions::get_label_conditions( $label_id );
 
 				if ( $this->should_display_label_for_this_product( $label_conditions, $label_id ) ) {
 					array_push( $pruduct_labels, $view->get_html( $label_id ) );
 				}
-
-				return $pruduct_labels;
 			}
+			return $pruduct_labels;
 		}
 
 		public function should_display_label_for_this_product( $label_conditions, $label_id ) {
@@ -73,7 +75,22 @@ if ( ! class_exists( 'Ri_WL_Label_Display' ) ) {
 			global $product;
 			$product_id = $product->get_id();
 
-			$labels = $this->get_product_labels( $product_id );
+			$labels = $this->get_product_labels( $product_id, 'on_image' );
+
+			if ( empty( $labels ) ) {
+				return;
+			}
+
+			foreach ( $labels as $label ) {
+				echo $label;
+			}
+		}
+
+		public function display_label_before_title() {
+			global $product;
+			$product_id = $product->get_id();
+
+			$labels = $this->get_product_labels( $product_id, 'before_title' );
 
 			if ( empty( $labels ) ) {
 				return;
