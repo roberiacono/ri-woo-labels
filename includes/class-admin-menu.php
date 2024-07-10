@@ -5,20 +5,7 @@ defined( 'ABSPATH' ) || exit;
 if ( ! class_exists( 'Ri_WL_Admin_Menu' ) ) {
 	class Ri_WL_Admin_Menu {
 		public function __construct() {
-			// add_action( 'admin_menu', array( $this, 'add_menu_pages' ) );
 			add_action( 'admin_menu', array( $this, 'add_submenu_pages' ) );
-		}
-
-		public function add_menu_page() {
-			/*
-			add_menu_pages(
-				__( 'Woo Labels', 'ri-woo-labels' ),
-				__( 'Woo Labels', 'ri-woo-labels' ),
-				'manage_options',
-				'ri-woo-labels-settings',
-				array( $this, 'render_settings_page' ),
-				'dashicons-nametag'
-			); */
 		}
 
 		public function add_submenu_pages() {

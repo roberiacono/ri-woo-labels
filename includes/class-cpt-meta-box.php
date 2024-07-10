@@ -6,21 +6,80 @@ if ( ! class_exists( 'Ri_WL_CPT_Meta_Box' ) ) {
 	class Ri_WL_CPT_Meta_Box {
 		public function __construct() {
 			add_action( 'add_meta_boxes', array( $this, 'register_meta_boxes' ) );
+			add_action( 'save_post', array( $this, 'save_meta_box' ) );
 		}
 
 		public function register_meta_boxes() {
 			add_meta_box(
-				'ri-woo-labels-cpt-metabox',
-				__( 'Woo Labels', 'ri-woo-labels' ),
-				array( $this, 'meta_box' ),
+				'ri-woo-labels-cpt-settings-meta-box',
+				__( 'Settings', 'ri-woo-labels' ),
+				array( $this, 'render_settings_meta_box' ),
+				'woo-label'
+			);
+
+			add_meta_box(
+				'ri-woo-labels-cpt-conditions-meta-box',
+				__( 'Conditions', 'ri-woo-labels' ),
+				array( $this, 'render_conditions_meta_box' ),
 				'woo-label'
 			);
 		}
 
-		public function meta_box() {
-			$default_values = new Ri_WL_CPT_Values();
-			
-			print_r( $default_values->get_default_values() );
+		/**
+		 * Renders meta boxes.
+		 */
+		public function render_settings_meta_box() {
+			require_once RI_WOO_LABELS_PLUGIN_DIR . 'templates/meta-box-label-settings.php';
+		}
+
+		public function render_conditions_meta_box() {
+			require_once RI_WOO_LABELS_PLUGIN_DIR . 'templates/meta-box-label-conditions.php';
+		}
+
+
+
+		/**
+		 * Save meta box content.
+		 *
+		 * @param int $post_id Post ID
+		 */
+		function save_meta_box( $post_id ) {
+			$nonce_name   = isset( $_POST['save_nonce'] ) ? $_POST['save_nonce'] : '';
+			$nonce_action = 'ri_woo_labels_save_nonce_action';
+
+			/*
+			error_log( '$_POST' );
+			error_log( print_r( $_POST, true ) );
+			*/
+			// Check if nonce is valid.
+			if ( ! wp_verify_nonce( $nonce_name, $nonce_action ) ) {
+				return;
+			}
+
+			// Check if user has permissions to save data.
+			if ( ! current_user_can( 'edit_post', $post_id ) ) {
+				return;
+			}
+
+			// Check if not an autosave.
+			if ( wp_is_post_autosave( $post_id ) ) {
+				return;
+			}
+
+			// Check if not a revision.
+			if ( wp_is_post_revision( $post_id ) ) {
+				return;
+			}
+
+			if ( isset( $_POST['type'] ) ) {
+				update_post_meta( $post_id, '_type_meta_key', sanitize_text_field( $_POST['type'] ) );
+			}
+
+			if ( isset( $_POST['conditions'] ) ) {
+				update_post_meta( $post_id, '_ri_woo_labels_conditions', maybe_serialize( $_POST['conditions'] ) ); // TODO: sanitize $_POST['conditions'] checking in array of default conditions
+			} else {
+				delete_post_meta( $post_id, '_ri_woo_labels_conditions' );
+			}
 		}
 	}
 }
