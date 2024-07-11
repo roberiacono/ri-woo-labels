@@ -34,6 +34,9 @@ if ( ! class_exists( 'Ri_WL_CPT_Conditions' ) ) {
 
 		public static function get_label_conditions( $post_id ) {
 			$conditions = get_post_meta( $post_id, '_ri_woo_labels_conditions', true );
+			if ( ! $conditions ) {
+				return false;
+			}
 			$conditions = maybe_unserialize( $conditions );
 			return $conditions;
 		}

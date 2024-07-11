@@ -8,7 +8,7 @@ if ( ! class_exists( 'Ri_WL_Label_Display' ) ) {
 		public function __construct() {
 			// add_action( 'woocommerce_before_shop_loop_item_title', array( $this, 'display_label_before_title' ) );
 			add_action( 'woocommerce_before_shop_loop_item_title', array( $this, 'display_label_on_image' ) );
-			add_action( 'woocommerce_before_shop_loop_item_title', array( $this, 'display_label_before_title' ) );
+			add_action( 'woocommerce_shop_loop_item_title', array( $this, 'display_label_before_title' ), 9 );
 		}
 
 		public function get_product_labels( $product_id, $where_to_display ) {
@@ -27,7 +27,15 @@ if ( ! class_exists( 'Ri_WL_Label_Display' ) ) {
 				$label_conditions = Ri_WL_CPT_Conditions::get_label_conditions( $label_id );
 
 				if ( $this->should_display_label_for_this_product( $label_conditions, $label_id ) ) {
-					array_push( $pruduct_labels, $view->get_html( $label_id ) );
+					if ( $where_to_display === 'on_image' ) {
+						$position = get_post_meta( $label_id, '_ri_wl_label_setting_position', true );
+						if ( ! isset( $pruduct_labels[ $position ] ) ) {
+							$pruduct_labels[ $position ] = array();
+						}
+						array_push( $pruduct_labels[ $position ], $view->get_html( $label_id ) );
+					} else {
+						array_push( $pruduct_labels, $view->get_html( $label_id ) );
+					}
 				}
 			}
 			return $pruduct_labels;
@@ -36,6 +44,10 @@ if ( ! class_exists( 'Ri_WL_Label_Display' ) ) {
 		public function should_display_label_for_this_product( $label_conditions, $label_id ) {
 			global $product;
 			$product_id = $product->get_id();
+
+			if ( ! $label_conditions ) {
+				return false;
+			}
 
 			$should_display_label_for_this_product = true;
 			foreach ( $label_conditions as $condition ) {
@@ -77,12 +89,31 @@ if ( ! class_exists( 'Ri_WL_Label_Display' ) ) {
 
 			$labels = $this->get_product_labels( $product_id, 'on_image' );
 
-			if ( empty( $labels ) ) {
+			if ( empty( $labels ) || count( $labels ) === 0 ) {
 				return;
 			}
 
-			foreach ( $labels as $label ) {
-				echo $label;
+			foreach ( $labels as $key => $value ) {
+
+				$style    = array();
+				$position = $key;
+				if ( $position === 'top-left' ) {
+					$style[] = 'top: 0;';
+					$style[] = 'left: 0;';
+				} elseif ( $position === 'top-right' ) {
+					$style[] = 'top: 0;';
+					$style[] = 'right: 0;';
+				} elseif ( $position === 'bottom-right' ) {
+					$style[] = 'bottom: 0;';
+					$style[] = 'right: 0;';
+				} elseif ( $position === 'bottom-left' ) {
+					$style[] = 'bottom: 0;';
+					$style[] = 'left: 0;';
+				}
+				$style = implode( ' ', $style );
+
+				echo '<div class="ri-woo-labels-container" style="position: absolute; display: flex; gap: 0.5rem; ' . esc_attr( $style ) . '">' . implode( ' ', $value ) . '</div>';
+				error_log( print_r( wc_get_image_size( 'woocommerce_thumbnail' ), true ) );
 			}
 		}
 
@@ -97,7 +128,7 @@ if ( ! class_exists( 'Ri_WL_Label_Display' ) ) {
 			}
 
 			foreach ( $labels as $label ) {
-				echo $label;
+				echo '<div class="ri-woo-labels-container" style="display: flex; gap: 0.5rem; justify-content: center; margin-bottom: 10px;" >' . $label . '</div>';
 			}
 		}
 	}

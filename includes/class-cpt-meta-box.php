@@ -18,6 +18,13 @@ if ( ! class_exists( 'Ri_WL_CPT_Meta_Box' ) ) {
 			);
 
 			add_meta_box(
+				'ri-woo-labels-cpt-custom-style-meta-box',
+				__( 'Custom Style', 'ri-woo-labels' ),
+				array( $this, 'render_custom_style_meta_box' ),
+				'woo-label'
+			);
+
+			add_meta_box(
 				'ri-woo-labels-cpt-conditions-meta-box',
 				__( 'Conditions', 'ri-woo-labels' ),
 				array( $this, 'render_conditions_meta_box' ),
@@ -30,6 +37,10 @@ if ( ! class_exists( 'Ri_WL_CPT_Meta_Box' ) ) {
 		 */
 		public function render_settings_meta_box() {
 			require_once RI_WOO_LABELS_PLUGIN_DIR . 'templates/meta-box-label-settings.php';
+		}
+
+		public function render_custom_style_meta_box() {
+			require_once RI_WOO_LABELS_PLUGIN_DIR . 'templates/meta-box-label-custom-style.php';
 		}
 
 		public function render_conditions_meta_box() {
@@ -77,12 +88,29 @@ if ( ! class_exists( 'Ri_WL_CPT_Meta_Box' ) ) {
 					if ( isset( $_POST[ $key ] ) && array_key_exists( $_POST[ $key ], $value['options'] ) ) { // validation
 						update_post_meta( $post_id, '_' . $key, $_POST[ $key ] );
 					}
-				} elseif ( $value ['type'] === 'text' ) {
-					if ( isset( $_POST[ $key ] ) && sanitize_text_field( $_POST[ $key ] ) ) { // validation
+				} elseif ( in_array( $value ['type'], array( 'text', 'color' ) ) ) {
+					if ( isset( $_POST[ $key ] ) && sanitize_text_field( $_POST[ $key ] ) ) {
 						update_post_meta( $post_id, '_' . $key, $_POST[ $key ] );
 					}
 				}
 			}
+
+			$meta_box_styles = Ri_WL_CPT_Values::get_meta_box_settings_style_values();
+			foreach ( $meta_box_styles as $key => $value ) {
+				if ( in_array( $value ['type'], array( 'text', 'color' ) ) ) {
+					if ( isset( $_POST[ $key ] ) && sanitize_text_field( $_POST[ $key ] ) ) {
+						update_post_meta( $post_id, '_' . $key, $_POST[ $key ] );
+					}
+				} elseif ( in_array( $value ['type'], array( 'four-numbers' ) ) ) {
+					if ( isset( $_POST[ $key ] ) && map_deep( $_POST[ $key ], 'sanitize_text_field' ) ) {
+						update_post_meta( $post_id, '_' . $key, maybe_serialize( $_POST[ $key ] ) );
+					}
+				}
+			}
+
+			/*
+			error_log( '****************' );
+			error_log( print_r( $_POST, true ) ); */
 
 			if ( isset( $_POST['conditions'] ) ) {
 				// avoid empty conditions

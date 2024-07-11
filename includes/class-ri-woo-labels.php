@@ -128,6 +128,9 @@ if ( ! class_exists( 'Ri_Woo_Labels' ) ) {
 						)
 					);
 					wp_enqueue_script( 'ri-woo-labels-meta-box' );
+
+					wp_enqueue_style( 'wp-color-picker' );
+					wp_enqueue_script( 'ri-woo-labels-color-picker', RI_WOO_LABELS_PLUGIN_URL . 'assets/admin/js/color-picker.js', array( 'wp-color-picker' ), RI_WOO_LABELS_PLUGIN_VERSION, true );
 				}
 			}
 		}
