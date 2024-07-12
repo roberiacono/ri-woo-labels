@@ -30,6 +30,21 @@ if ( ! class_exists( 'Ri_WL_CPT_Meta_Box' ) ) {
 				array( $this, 'render_conditions_meta_box' ),
 				'woo-label'
 			);
+
+			add_meta_box(
+				'ri-woo-labels-cpt-variables-meta-box',
+				__( 'Variables', 'ri-woo-labels' ),
+				array( $this, 'render_variables_meta_box' ),
+				'woo-label'
+			);
+
+			add_meta_box(
+				'ri-woo-labels-cpt-preview-meta-box',
+				__( 'Preview', 'ri-woo-labels' ),
+				array( $this, 'render_preview_meta_box' ),
+				'woo-label',
+				'side'
+			);
 		}
 
 		/**
@@ -45,6 +60,14 @@ if ( ! class_exists( 'Ri_WL_CPT_Meta_Box' ) ) {
 
 		public function render_conditions_meta_box() {
 			require_once RI_WOO_LABELS_PLUGIN_DIR . 'templates/meta-box-label-conditions.php';
+		}
+
+		public function render_variables_meta_box() {
+			require_once RI_WOO_LABELS_PLUGIN_DIR . 'templates/meta-box-label-variables.php';
+		}
+
+		public function render_preview_meta_box() {
+			require_once RI_WOO_LABELS_PLUGIN_DIR . 'templates/meta-box-label-preview.php';
 		}
 
 
@@ -82,6 +105,16 @@ if ( ! class_exists( 'Ri_WL_CPT_Meta_Box' ) ) {
 				return;
 			}
 
+			// deleted empty options
+			if ( ! isset( $_POST['ri_wl_label_setting_template'] ) ) {
+				delete_post_meta( $post_id, '_ri_wl_label_setting_template' );
+			}
+
+			if ( ! isset( $_POST['ri_wl_label_setting_predefined_colors'] ) ) {
+				delete_post_meta( $post_id, '_ri_wl_label_setting_predefined_colors' );
+			}
+
+			// save options
 			$meta_box_settings = Ri_WL_CPT_Values::get_meta_box_settings_values();
 			foreach ( $meta_box_settings as $key => $value ) {
 				if ( $value ['type'] === 'select' || $value ['type'] === 'radio' ) {
@@ -95,9 +128,14 @@ if ( ! class_exists( 'Ri_WL_CPT_Meta_Box' ) ) {
 				}
 			}
 
+			// remove unnecessary fields
+			if ( isset( $_POST['ri_wl_label_setting_where'] ) && $_POST['ri_wl_label_setting_where'] !== 'on_image' ) {
+				delete_post_meta( $post_id, '_ri_wl_label_setting_position' );
+			}
+
 			$meta_box_styles = Ri_WL_CPT_Values::get_meta_box_settings_style_values();
 			foreach ( $meta_box_styles as $key => $value ) {
-				if ( in_array( $value ['type'], array( 'text', 'color' ) ) ) {
+				if ( in_array( $value ['type'], array( 'color' ) ) ) {
 					if ( isset( $_POST[ $key ] ) && sanitize_text_field( $_POST[ $key ] ) ) {
 						update_post_meta( $post_id, '_' . $key, $_POST[ $key ] );
 					}
@@ -107,10 +145,6 @@ if ( ! class_exists( 'Ri_WL_CPT_Meta_Box' ) ) {
 					}
 				}
 			}
-
-			/*
-			error_log( '****************' );
-			error_log( print_r( $_POST, true ) ); */
 
 			if ( isset( $_POST['conditions'] ) ) {
 				// avoid empty conditions

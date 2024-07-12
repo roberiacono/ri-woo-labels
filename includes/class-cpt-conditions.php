@@ -8,23 +8,42 @@ if ( ! class_exists( 'Ri_WL_CPT_Conditions' ) ) {
 		public static function get_default_conditions() {
 			$categories = self::get_woo_categories();
 			// $conditions = ri_woo_labels()->get_default_conditions();
+
+			$equal_not_equal = array(
+				'equal'     => __( 'Equal', 'ri-woo-labels' ),
+				'not-equal' => __( 'Not Equal', 'ri-woo-labels' ),
+			);
+			$yes_no          = array(
+				'yes' => __( 'Yes', 'ri-woo-labels' ),
+				'no'  => __( 'No', 'ri-woo-labels' ),
+			);
+
 			$conditions = array(
+				'bestseller'       => array(
+					'label'   => __( 'Bestseller Product', 'ri-woo-labels' ),
+					'compare' => $equal_not_equal,
+					'values'  => $yes_no,
+				),
+				'featured'         => array(
+					'label'   => __( 'Featured Product', 'ri-woo-labels' ),
+					'compare' => $equal_not_equal,
+					'values'  => $yes_no,
+				),
 				'is_on_sale'       => array(
 					'label'   => __( 'Is On Sale', 'ri-woo-labels' ),
 					'compare' => array(
 						'equal' => __( 'Equal', 'ri-woo-labels' ),
 					),
-					'values'  => array(
-						'yes' => __( 'Yes', 'ri-woo-labels' ),
-						'no'  => __( 'No', 'ri-woo-labels' ),
-					),
+					'values'  => $yes_no,
+				),
+				'out-of-stock'     => array(
+					'label'   => __( 'Out Of Stock Product', 'ri-woo-labels' ),
+					'compare' => $equal_not_equal,
+					'values'  => $yes_no,
 				),
 				'product_category' => array(
 					'label'   => __( 'Product Category', 'ri-woo-labels' ),
-					'compare' => array(
-						'equal'     => __( 'Equal', 'ri-woo-labels' ),
-						'not-equal' => __( 'Not Equal', 'ri-woo-labels' ),
-					),
+					'compare' => $equal_not_equal,
 					'values'  => $categories,
 				),
 			);

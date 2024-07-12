@@ -16,6 +16,11 @@ var_dump( 'ri_wl_label_setting_where: ' . $label_setting_where );
 var_dump( 'ri_wl_label_setting_position: ' . get_post_meta( $post->ID, '_ri_wl_label_setting_position', true ) );
 var_dump( 'ri_wl_label_setting_template: ' . get_post_meta( $post->ID, '_ri_wl_label_setting_template', true ) );
 echo '</pre>';
+
+$is_new_label = false;
+if ( Ri_WL_Helpers::is_new_page() ) {
+	$is_new_label = true;
+}
 ?>
 
 <div class="ri_woo_labels_options_panel">
@@ -49,6 +54,12 @@ echo '</pre>';
 					$color            = '';
 					$padding          = '';
 					$border_radius    = '';
+					if ( $is_new_label ) {
+						$styles .= 'background-color: ' . $meta_box_settings['ri_wl_label_setting_predefined_colors']['options']['color-1']['style']['background-color'] . '; ';
+						$styles .= 'color: ' . $meta_box_settings['ri_wl_label_setting_predefined_colors']['options']['color-1']['style']['color'] . '; ';
+						$styles .= 'padding: ' . $meta_box_settings['ri_wl_label_setting_template']['options']['template-1']['style']['padding'] . '; ';
+						$styles .= 'border-radius: ' . $meta_box_settings['ri_wl_label_setting_template']['options']['template-1']['style']['border-radius'] . '; ';
+					}
 					if ( isset( $option_values['style']['background-color'] ) ) {
 						$background_color = $option_values['style']['background-color'];
 						$styles          .= 'background-color: ' . $background_color . '; ';
@@ -109,11 +120,6 @@ echo '</pre>';
 						<input type="text" name="<?php echo esc_attr( $key ); ?>" value="<?php echo get_post_meta( $post->ID, '_' . $key, true ); ?>">
 						<?php
 				break;
-			case 'color':
-				?>
-						<input type="text" name="<?php echo esc_attr( $key ); ?>" value="<?php echo get_post_meta( $post->ID, '_' . $key, true ); ?>" class="ri-woo-labels-color-field" data-default-color="<?php echo esc_attr( $value['default'] ); ?>;" />
-							<?php
-				break;
 		}
 
 		if ( isset( $value['description'] ) && $value['description'] ) {
@@ -135,7 +141,8 @@ echo '</pre>';
 	}
 	.ri_woo_labels_options_panel .form-field .radio-wrapper {
 		display: flex;
-		gap: 1rem;
+		gap: 1.5rem;
+		flex-wrap: wrap;
 	}
 
 	.ri_woo_labels_options_panel .form-field .radio-wrapper label {

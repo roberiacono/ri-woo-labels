@@ -14,6 +14,12 @@ echo '<pre>';
 echo 'ri_wl_label_setting_border_radius: ';
 var_dump( get_post_meta( $post->ID, '_ri_wl_label_setting_border_radius', true ) );
 echo '</pre>';
+
+$is_new_label = false;
+if ( Ri_WL_Helpers::is_new_page() ) {
+	$is_new_label = true;
+}
+
 ?>
 
 <div class="ri_woo_labels_options_panel">
@@ -63,18 +69,19 @@ echo '</pre>';
 						<?php
 				break;
 			case 'color':
+				$color_value = $is_new_label ? $value['default'] : get_post_meta( $post->ID, '_' . $key, true );
 				?>
-						<input type="text" name="<?php echo esc_attr( $key ); ?>" value="<?php echo get_post_meta( $post->ID, '_' . $key, true ); ?>" class="ri-woo-labels-color-field" data-default-color="<?php echo esc_attr( $value['default'] ); ?>;" />
+						<input type="text" name="<?php echo esc_attr( $key ); ?>" value="<?php echo esc_attr( $color_value ); ?>" class="ri-woo-labels-color-field" data-default-color="<?php echo esc_attr( $value['default'] ); ?>;" />
 							<?php
 				break;
 			case 'four-numbers':
 				$elements = maybe_unserialize( get_post_meta( $post->ID, '_' . $key, true ) );
 				?>
 					<div class="four-elements-inline">
-							<input type="number" name="<?php echo esc_attr( $key ); ?>[]" value="<?php echo $elements[0]; ?>">
-							<input type="number" name="<?php echo esc_attr( $key ); ?>[]" value="<?php echo $elements[1]; ?>">
-							<input type="number" name="<?php echo esc_attr( $key ); ?>[]" value="<?php echo $elements[2]; ?>">
-							<input type="number" name="<?php echo esc_attr( $key ); ?>[]" value="<?php echo $elements[3]; ?>">
+							<input type="number" step="any" name="<?php echo esc_attr( $key ); ?>[]" value="<?php echo $elements[0]; ?>">
+							<input type="number" step="any" name="<?php echo esc_attr( $key ); ?>[]" value="<?php echo $elements[1]; ?>">
+							<input type="number" step="any" name="<?php echo esc_attr( $key ); ?>[]" value="<?php echo $elements[2]; ?>">
+							<input type="number" step="any" name="<?php echo esc_attr( $key ); ?>[]" value="<?php echo $elements[3]; ?>">
 					</div>			
 					<?php
 				break;

@@ -1,4 +1,5 @@
 jQuery(document).ready(function ($) {
+  // conditions
   const defaultConditions = ri_woo_labels_meta_box_scripts.conditions;
   console.log("defaultConditions ", defaultConditions);
   let counter = $("#conditions-wrapper .conditions-wrapper__row").length;
@@ -94,32 +95,83 @@ jQuery(document).ready(function ($) {
     counter++;
   }
 
+  if (counter === 0) {
+    addNewCondition();
+  }
+
+  function update_where(selected) {
+    if (selected === "before_title") {
+      $(".form-field.ri_wl_label_setting_position").hide();
+      $(
+        ".ri_woo_labels_preview_panel .before-title .ri-woo-labels-container"
+      ).show();
+      $(
+        ".ri_woo_labels_preview_panel .ri_wl_div_wrapper .ri-woo-labels-container"
+      ).hide();
+    } else {
+      $(".form-field.ri_wl_label_setting_position").show();
+      $(
+        ".ri_woo_labels_preview_panel .before-title .ri-woo-labels-container"
+      ).hide();
+      $(
+        ".ri_woo_labels_preview_panel .ri_wl_div_wrapper .ri-woo-labels-container"
+      ).show();
+    }
+  }
+  update_where($("select[name='ri_wl_label_setting_where']").val());
   /* settings section */
   $(document).on(
     "change",
     "select[name='ri_wl_label_setting_where']",
     function () {
       const selected = $(this).val();
-      if (selected === "before_title") {
-        $(".form-field.ri_wl_label_setting_position").hide();
-      } else {
-        $(".form-field.ri_wl_label_setting_position").show();
-      }
+      update_where(selected);
     }
   );
 
-  // change text on template button
-  let text = $("input[name='ri_wl_label_setting_text']").val();
-  console.log("text", text);
-  $(".radio-wrapper .woo-labels-ri_wl_label_setting_template__span").html(text);
+  function update_position(selected) {
+    $(
+      ".ri_woo_labels_preview_panel .ri_wl_div_wrapper .ri-woo-labels-container"
+    )
+      .css("top", "")
+      .css("left", "")
+      .css("bottom", "")
+      .css("right", "");
 
+    if (selected === "top-left") {
+      $(
+        ".ri_woo_labels_preview_panel .ri_wl_div_wrapper .ri-woo-labels-container"
+      )
+        .css("top", 0)
+        .css("left", 0);
+    } else if (selected === "top-right") {
+      $(
+        ".ri_woo_labels_preview_panel .ri_wl_div_wrapper .ri-woo-labels-container"
+      )
+        .css("top", 0)
+        .css("right", 0);
+    } else if (selected === "bottom-right") {
+      $(
+        ".ri_woo_labels_preview_panel .ri_wl_div_wrapper .ri-woo-labels-container"
+      )
+        .css("bottom", 0)
+        .css("right", 0);
+    } else if (selected === "bottom-left") {
+      $(
+        ".ri_woo_labels_preview_panel .ri_wl_div_wrapper .ri-woo-labels-container"
+      )
+        .css("bottom", 0)
+        .css("left", 0);
+    }
+  }
+  update_position($("select[name='ri_wl_label_setting_position']").val());
+  // on position change
   $(document).on(
     "change",
-    "input[name='ri_wl_label_setting_text']",
+    "select[name='ri_wl_label_setting_position']",
     function () {
-      $(".radio-wrapper .woo-labels-ri_wl_label_setting_template__span").html(
-        $(this).val()
-      );
+      const selected = $(this).val();
+      update_position(selected);
     }
   );
 
@@ -135,6 +187,11 @@ jQuery(document).ready(function ($) {
       $(
         ".radio-wrapper .woo-labels-ri_wl_label_setting_predefined_colors__span"
       ).css("border-radius", borderRadius);
+
+      $(".ri_woo_labels_preview_panel .ri-woo-labels-container span").css(
+        "border-radius",
+        borderRadius
+      );
 
       if (borderRadius) {
         borderRadius = borderRadius.replaceAll("px", "").split(" ");
@@ -152,6 +209,11 @@ jQuery(document).ready(function ($) {
       $(
         ".radio-wrapper .woo-labels-ri_wl_label_setting_predefined_colors__span"
       ).css("padding", padding);
+
+      $(".ri_woo_labels_preview_panel .ri-woo-labels-container span").css(
+        "padding",
+        padding
+      );
 
       if (padding) {
         padding = padding.replaceAll("px", "").split(" ");
@@ -185,6 +247,11 @@ jQuery(document).ready(function ($) {
         $("input[name='ri_wl_label_setting_background_color']").val(
           backgroundColor
         );
+
+        $(".ri_woo_labels_preview_panel .ri-woo-labels-container span").css(
+          "background-color",
+          backgroundColor
+        );
       }
 
       if (color) {
@@ -199,7 +266,153 @@ jQuery(document).ready(function ($) {
         );
 
         $("input[name='ri_wl_label_setting_text_color']").val(color);
+
+        $(".ri_woo_labels_preview_panel .ri-woo-labels-container span").css(
+          "color",
+          color
+        );
       }
     }
   );
+
+  // on change padding, set empty template
+  $(document).on(
+    "change",
+    "input[name='ri_wl_label_setting_padding[]']",
+    function () {
+      $("input[name='ri_wl_label_setting_template']").prop("checked", false);
+
+      let padding = [];
+      $("input[name='ri_wl_label_setting_padding[]']").each(function (index) {
+        padding.push($(this).val() + "px");
+      });
+      padding = padding.join(" ");
+      $(".ri_woo_labels_preview_panel .ri-woo-labels-container span").css(
+        "padding",
+        padding
+      );
+      $(".woo-labels-ri_wl_label_setting_predefined_colors span").css(
+        "padding",
+        padding
+      );
+    }
+  );
+
+  // on change border radius, set empty template
+  $(document).on(
+    "change",
+    "input[name='ri_wl_label_setting_border_radius[]']",
+    function () {
+      $("input[name='ri_wl_label_setting_template']").prop("checked", false);
+
+      let borderRadius = [];
+      $("input[name='ri_wl_label_setting_border_radius[]']").each(function (
+        index
+      ) {
+        borderRadius.push($(this).val() + "px");
+      });
+      borderRadius = borderRadius.join(" ");
+      $(".ri_woo_labels_preview_panel .ri-woo-labels-container span").css(
+        "border-radius",
+        borderRadius
+      );
+      $(".woo-labels-ri_wl_label_setting_predefined_colors span").css(
+        "border-radius",
+        borderRadius
+      );
+    }
+  );
+
+  // on change margin
+  $(document).on(
+    "change",
+    "input[name='ri_wl_label_setting_margin[]']",
+    function () {
+      $("input[name='ri_wl_label_setting_template']").prop("checked", false);
+
+      let margin = [];
+      $("input[name='ri_wl_label_setting_margin[]']").each(function (index) {
+        margin.push($(this).val() + "px");
+      });
+      margin = margin.join(" ");
+      $(".ri_woo_labels_preview_panel .ri-woo-labels-container span").css(
+        "margin",
+        margin
+      );
+      $(".woo-labels-ri_wl_label_setting_predefined_colors span").css(
+        "margin",
+        margin
+      );
+    }
+  );
+
+  // on change color, set empty predefined colors
+
+  $(
+    ".ri_wl_label_setting_background_color .ri-woo-labels-color-field"
+  ).wpColorPicker({
+    /**
+     * @param {Event} event - standard jQuery event, produced by whichever
+     * control was changed.
+     * @param {Object} ui - standard jQuery UI object, with a color member
+     * containing a Color.js object.
+     */
+    change: function (event, ui) {
+      var element = event.target;
+      var color = ui.color.toString();
+      $("input[name='ri_wl_label_setting_predefined_colors']").prop(
+        "checked",
+        false
+      );
+
+      $(".radio-wrapper .woo-labels-ri_wl_label_setting_template__span").css(
+        "background-color",
+        color
+      );
+
+      $(".ri_woo_labels_preview_panel .ri-woo-labels-container span").css(
+        "background-color",
+        color
+      );
+    },
+  });
+
+  $(".ri_wl_label_setting_text_color .ri-woo-labels-color-field").wpColorPicker(
+    {
+      /**
+       * @param {Event} event - standard jQuery event, produced by whichever
+       * control was changed.
+       * @param {Object} ui - standard jQuery UI object, with a color member
+       * containing a Color.js object.
+       */
+      change: function (event, ui) {
+        var element = event.target;
+        var color = ui.color.toString();
+        $("input[name='ri_wl_label_setting_predefined_colors']").prop(
+          "checked",
+          false
+        );
+
+        $(".radio-wrapper .woo-labels-ri_wl_label_setting_template__span").css(
+          "color",
+          color
+        );
+
+        $(".ri_woo_labels_preview_panel .ri-woo-labels-container span").css(
+          "color",
+          color
+        );
+      },
+    }
+  );
+
+  $("input[name='ri_wl_label_setting_text']").keyup(function () {
+    // Getting the current value of textarea
+    var currentText = $(this).val();
+
+    // Setting the Div content
+    $(".ri_woo_labels_preview_panel .ri-woo-labels-container span").text(
+      currentText
+    );
+  });
 });

@@ -57,6 +57,19 @@ if ( ! class_exists( 'Ri_WL_Label_Display' ) ) {
 				}
 
 				switch ( $condition['type'] ) {
+					case 'bestseller':
+						$bestseller = Ri_WL_Helpers::get_bestseller_last_n_days();
+
+						if ( $condition['compare'] === 'equal' ) {
+							if ( ! in_array( $product_id, $bestseller ) ) {
+								$should_display_label_for_this_product = false;
+							}
+						} elseif ( $condition['compare'] === 'not-equal' ) {
+							if ( in_array( $product_id, $bestseller ) ) {
+								$should_display_label_for_this_product = false;
+							}
+						}
+						break;
 					case 'is_on_sale':
 						if ( $condition['compare'] === 'equal' ) {
 							if ( $condition['value'] === 'yes' && ! $product->is_on_sale() ) {
@@ -77,6 +90,28 @@ if ( ! class_exists( 'Ri_WL_Label_Display' ) ) {
 							}
 						}
 						break;
+					case 'featured':
+						if ( $condition['compare'] === 'equal' ) {
+							if ( ! $product->is_featured() ) {
+								$should_display_label_for_this_product = false;
+							}
+						} elseif ( $condition['compare'] === 'not-equal' ) {
+							if ( $product->is_featured() ) {
+								$should_display_label_for_this_product = false;
+							}
+						}
+						break;
+					case 'out-of-stock':
+						if ( $condition['compare'] === 'equal' ) {
+							if ( ! $product->get_stock_quantity() > 0 ) {
+								$should_display_label_for_this_product = false;
+							}
+						} elseif ( $condition['compare'] === 'not-equal' ) {
+							if ( $product->get_stock_quantity() > 0 ) {
+								$should_display_label_for_this_product = false;
+							}
+						}
+						break;
 				}
 			}
 			return $should_display_label_for_this_product;
@@ -92,6 +127,9 @@ if ( ! class_exists( 'Ri_WL_Label_Display' ) ) {
 			if ( empty( $labels ) || count( $labels ) === 0 ) {
 				return;
 			}
+
+			$div_top    = array();
+			$div_bottom = array();
 
 			foreach ( $labels as $key => $value ) {
 
@@ -112,9 +150,14 @@ if ( ! class_exists( 'Ri_WL_Label_Display' ) ) {
 				}
 				$style = implode( ' ', $style );
 
-				echo '<div class="ri-woo-labels-container" style="position: absolute; display: flex; gap: 0.5rem; ' . esc_attr( $style ) . '">' . implode( ' ', $value ) . '</div>';
-				error_log( print_r( wc_get_image_size( 'woocommerce_thumbnail' ), true ) );
+				if ( $position === 'top-left' || $position === 'top-right' ) {
+					$div_top[] = '<div class="ri-woo-labels-container" style="display: flex; gap: 0.5rem; ' . esc_attr( $style ) . '">' . implode( ' ', $value ) . '</div>';
+				} elseif ( $position === 'bottom-left' || $position === 'bottom-right' ) {
+					$div_bottom[] = '<div class="ri-woo-labels-container" style="display: flex; gap: 0.5rem; ' . esc_attr( $style ) . '">' . implode( ' ', $value ) . '</div>';
+				}
 			}
+			echo '<div class="ri-woo-labels-wrapper-container" style="position: absolute; display: flex; gap: 0.5rem; top: 0; left: 0;">' . implode( ' ', $div_top ) . '</div>';
+			echo '<div class="ri-woo-labels-wrapper-container" style="position: absolute; display: flex; gap: 0.5rem; bottom: 0; left: 0;">' . implode( ' ', $div_bottom ) . '</div>';
 		}
 
 		public function display_label_before_title() {
