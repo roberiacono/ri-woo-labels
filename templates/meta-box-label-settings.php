@@ -103,10 +103,10 @@ if ( Ri_WL_Helpers::is_new_page() ) {
 					?>
 						<label>
 							<input type="radio" name="<?php echo esc_attr( $key ); ?>" value="<?php echo esc_attr( $option_key ); ?>" class="radio-button" <?php checked( get_post_meta( $post->ID, '_' . $key, true ), $option_key ); ?>   data-background-color="<?php echo esc_attr( $background_color ); ?>" data-color="<?php echo esc_attr( $color ); ?>"  data-padding="<?php echo esc_attr( $padding ); ?>" data-border-radius="<?php echo esc_attr( $border_radius ); ?>" />
-							<div class="woo-labels-<?php echo esc_attr( $key ); ?>">
-								<span class="woo-labels-<?php echo esc_attr( $key ); ?>__span <?php echo esc_attr( $option_key ); ?>" style="<?php echo esc_attr( $styles ); ?>">
-								<span><?php esc_html_e( $option_values['label'] ); ?></span>
-								</span>
+							<div class="woo-labels-<?php echo esc_attr( $key ); ?>" style="position: relative;">
+								<div class="ri-wl_span-container woo-labels-<?php echo esc_attr( $key ); ?>__span <?php echo esc_attr( $option_key ); ?> <?php echo esc_attr( $option_key ); ?>-<?php echo esc_attr( $post->ID ); ?>" style="<?php echo esc_attr( $styles ); ?>">
+									<span><?php esc_html_e( $option_values['label'] ); ?></span>
+								</div>
 							</div>
 						</label>
 					<?php
@@ -151,63 +151,29 @@ if ( Ri_WL_Helpers::is_new_page() ) {
 		align-items: center;
 	}
 
-	.ri_woo_labels_options_panel label{
-	
-	}
-	.ri_woo_labels_options_panel .description {
-	
-	}
 
 
-	/* .woo-labels-template {
-		position: relative;
-		background-color: #fafafa;
-		width: 150px;
-		height: 150px;
-	}
-	.template-3 {
-	position: absolute;
-	top: -6.1px;
-	right: 10px;
-	}
-	.template-3:after {
-		position: absolute;
+	.template-5 {
+	text-align: center;
+	display: inline-block;
+	height: 30px;
+	line-height: 30px;
+	background: <?php echo get_post_meta( $post->ID, '_ri_wl_label_setting_background_color', true ); ?>;
+	border-radius: 3px;
+	padding: 0 10px;
+}
+	.template-5:before {
+		border-left-color: transparent !important;
+		display: inline-block;
 		content: "";
-		width: 0;
-		height: 0;
-		border-left: 53px solid transparent;
-		border-right: 53px solid transparent;
-		border-top: 10px solid #F8463F;
-	}
-	.template-3 span {
-		position: relative;
-		display: block;
-		text-align: center;
-		background: #F8463F;
-		font-size: 14px;
-		line-height: 1;
-		padding: 12px 8px 10px;
-		border-top-right-radius: 8px;
-		width: 90px;
-	}
-	.template-3 span:before, .template-3 span:after {
 		position: absolute;
-		content: "";
+		right: -20px;
+		top: 0;
+		border: 9px solid transparent;
+		border-width: 15px 15px;
+		border-color: <?php echo get_post_meta( $post->ID, '_ri_wl_label_setting_background_color', true ); ?>;
+		transform: rotate(180deg);
 	}
-	.template-3 span:before {
-	height: 6px;
-	width: 6px;
-	left: -6px;
-	top: 0;
-	background: #F8463F;
-	}
-	.template-3 span:after {
-	height: 6px;
-	width: 8px;
-	left: -8px;
-	top: 0;
-	border-radius: 8px 8px 0 0;
-	background: #C02031;
-	} */
+
 
 </style>

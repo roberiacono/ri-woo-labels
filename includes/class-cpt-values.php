@@ -43,6 +43,10 @@ if ( ! class_exists( 'Ri_WL_CPT_Values' ) ) {
 								'border-radius' => '12px 1.2px 12px 1.2px',
 							),
 						),
+						'template-5' => array(
+							'label' => __( 'Template 5', 'ri-woo-labels' ),
+							'style' => array(),
+						),
 					),
 				),
 				'ri_wl_label_setting_predefined_colors' => array(

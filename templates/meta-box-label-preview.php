@@ -47,22 +47,27 @@ if ( strpos( $text, '%%' ) !== false ) {
 	}
 }
 
-$style = $view->get_style( $label_id );
-$html  = '<span class="" style="' . esc_attr( $style ) . '">' . $text . '</span>';
+$style    = $view->get_style( $label_id );
+$template = get_post_meta( $label_id, '_ri_wl_label_setting_template', true );
+$html     = '<div class="ri-wl_span-container ' . $template . ' ' . $template . '-' . $label_id . '" style="' . $style . '"><span>' . $text . '</span></div>';
 
-
+/*
+$inline_css = '.ri-wl_span-container.' . $template . '.' . $template . '-' . $label_id . ':before {
+	border-color: ' . get_post_meta( $label_id, '_ri_wl_label_setting_background_color', true ) . ';
+}';
+echo '<style>' . esc_html( $inline_css ) . '</style>'; */
 ?>
 
 <div class="ri_woo_labels_preview_panel">
 	<div class="ri_wl_div_wrapper" style="position: relative; max-width: 324px; margin: 0 auto;">
 		<?php echo wc_placeholder_img(); ?>
-		<div class="ri-woo-labels-container" style="position: absolute; display: flex;">
-			<?php echo $html; ?>
+		<div class="ri-woo-labels-wrapper-container" style="position: absolute; top: 0; left: 0;">
+			<?php echo $html; // TODO: escaping ?> 
 		</div>
 	</div>
 	<div class="before-title">
-		<div class="ri-woo-labels-container" style="margin-top: 10px;">
-			<?php echo $html; ?>
+		<div class="ri-woo-labels-wrapper-container" style="position: relative;margin-top: 10px;">
+			<?php echo $html; // TODO: escaping ?>
 		</div>
 	</div>
 	<h3 class="woocommerce-loop-product__title">Product Title</h3>

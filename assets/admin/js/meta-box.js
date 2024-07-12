@@ -103,18 +103,18 @@ jQuery(document).ready(function ($) {
     if (selected === "before_title") {
       $(".form-field.ri_wl_label_setting_position").hide();
       $(
-        ".ri_woo_labels_preview_panel .before-title .ri-woo-labels-container"
+        ".ri_woo_labels_preview_panel .before-title .ri-wl_span-container"
       ).show();
       $(
-        ".ri_woo_labels_preview_panel .ri_wl_div_wrapper .ri-woo-labels-container"
+        ".ri_woo_labels_preview_panel .ri_wl_div_wrapper .ri-wl_span-container"
       ).hide();
     } else {
       $(".form-field.ri_wl_label_setting_position").show();
       $(
-        ".ri_woo_labels_preview_panel .before-title .ri-woo-labels-container"
+        ".ri_woo_labels_preview_panel .before-title .ri-wl_span-container"
       ).hide();
       $(
-        ".ri_woo_labels_preview_panel .ri_wl_div_wrapper .ri-woo-labels-container"
+        ".ri_woo_labels_preview_panel .ri_wl_div_wrapper .ri-wl_span-container"
       ).show();
     }
   }
@@ -130,36 +130,26 @@ jQuery(document).ready(function ($) {
   );
 
   function update_position(selected) {
-    $(
-      ".ri_woo_labels_preview_panel .ri_wl_div_wrapper .ri-woo-labels-container"
-    )
+    $(".ri_woo_labels_preview_panel .ri_wl_div_wrapper .ri-wl_span-container")
       .css("top", "")
       .css("left", "")
       .css("bottom", "")
       .css("right", "");
 
     if (selected === "top-left") {
-      $(
-        ".ri_woo_labels_preview_panel .ri_wl_div_wrapper .ri-woo-labels-container"
-      )
+      $(".ri_woo_labels_preview_panel .ri_wl_div_wrapper .ri-wl_span-container")
         .css("top", 0)
         .css("left", 0);
     } else if (selected === "top-right") {
-      $(
-        ".ri_woo_labels_preview_panel .ri_wl_div_wrapper .ri-woo-labels-container"
-      )
+      $(".ri_woo_labels_preview_panel .ri_wl_div_wrapper .ri-wl_span-container")
         .css("top", 0)
         .css("right", 0);
     } else if (selected === "bottom-right") {
-      $(
-        ".ri_woo_labels_preview_panel .ri_wl_div_wrapper .ri-woo-labels-container"
-      )
+      $(".ri_woo_labels_preview_panel .ri_wl_div_wrapper .ri-wl_span-container")
         .css("bottom", 0)
         .css("right", 0);
     } else if (selected === "bottom-left") {
-      $(
-        ".ri_woo_labels_preview_panel .ri_wl_div_wrapper .ri-woo-labels-container"
-      )
+      $(".ri_woo_labels_preview_panel .ri_wl_div_wrapper .ri-wl_span-container")
         .css("bottom", 0)
         .css("left", 0);
     }
@@ -182,13 +172,23 @@ jQuery(document).ready(function ($) {
     function () {
       let borderRadius = $(this).data("border-radius");
       let padding = $(this).data("padding");
+      const template = $(this).val();
+      const postID = $("#post_ID").val();
+
+      console.log("template", template);
+
+      $(".ri_woo_labels_preview_panel .ri-wl_span-container")
+        .removeClass()
+        .addClass("ri-wl_span-container")
+        .addClass(template)
+        .addClass(template + "-" + postID);
 
       // border radius
       $(
         ".radio-wrapper .woo-labels-ri_wl_label_setting_predefined_colors__span"
       ).css("border-radius", borderRadius);
 
-      $(".ri_woo_labels_preview_panel .ri-woo-labels-container span").css(
+      $(".ri_woo_labels_preview_panel .ri-wl_span-container").css(
         "border-radius",
         borderRadius
       );
@@ -210,7 +210,7 @@ jQuery(document).ready(function ($) {
         ".radio-wrapper .woo-labels-ri_wl_label_setting_predefined_colors__span"
       ).css("padding", padding);
 
-      $(".ri_woo_labels_preview_panel .ri-woo-labels-container span").css(
+      $(".ri_woo_labels_preview_panel .ri-wl_span-container").css(
         "padding",
         padding
       );
@@ -226,7 +226,44 @@ jQuery(document).ready(function ($) {
     }
   );
 
+  var styleElem = document.head.appendChild(document.createElement("style"));
+  styleElem.innerHTML =
+    ".ri-wl_span-container." +
+    $("input[name='ri_wl_label_setting_template']:checked").val() +
+    ":before {border-color: " +
+    $("input[name='ri_wl_label_setting_predefined_colors']:checked").data(
+      "background-color"
+    ) +
+    ";}";
+
   // change colors on predefined changes
+  function backgroundColorChanged(backgroundColor) {
+    // preview
+    var styleElem = document.head.appendChild(document.createElement("style"));
+    styleElem.innerHTML =
+      ".ri-wl_span-container:before {border-color: " +
+      backgroundColor +
+      " !important;}";
+    // end preview
+    $(".radio-wrapper .woo-labels-ri_wl_label_setting_template__span").css(
+      "background-color",
+      backgroundColor
+    );
+
+    $(".ri_wl_label_setting_background_color button").css(
+      "background-color",
+      backgroundColor
+    );
+
+    $("input[name='ri_wl_label_setting_background_color']").val(
+      backgroundColor
+    );
+
+    $(".ri_woo_labels_preview_panel .ri-wl_span-container").css(
+      "background-color",
+      backgroundColor
+    );
+  }
   $(document).on(
     "change",
     "input[name='ri_wl_label_setting_predefined_colors']",
@@ -234,24 +271,7 @@ jQuery(document).ready(function ($) {
       const backgroundColor = $(this).data("background-color");
       const color = $(this).data("color");
       if (backgroundColor) {
-        $(".radio-wrapper .woo-labels-ri_wl_label_setting_template__span").css(
-          "background-color",
-          backgroundColor
-        );
-
-        $(".ri_wl_label_setting_background_color button").css(
-          "background-color",
-          backgroundColor
-        );
-
-        $("input[name='ri_wl_label_setting_background_color']").val(
-          backgroundColor
-        );
-
-        $(".ri_woo_labels_preview_panel .ri-woo-labels-container span").css(
-          "background-color",
-          backgroundColor
-        );
+        backgroundColorChanged(backgroundColor);
       }
 
       if (color) {
@@ -267,7 +287,7 @@ jQuery(document).ready(function ($) {
 
         $("input[name='ri_wl_label_setting_text_color']").val(color);
 
-        $(".ri_woo_labels_preview_panel .ri-woo-labels-container span").css(
+        $(".ri_woo_labels_preview_panel .ri-wl_span-container").css(
           "color",
           color
         );
@@ -287,7 +307,7 @@ jQuery(document).ready(function ($) {
         padding.push($(this).val() + "px");
       });
       padding = padding.join(" ");
-      $(".ri_woo_labels_preview_panel .ri-woo-labels-container span").css(
+      $(".ri_woo_labels_preview_panel .ri-wl_span-container").css(
         "padding",
         padding
       );
@@ -328,18 +348,14 @@ jQuery(document).ready(function ($) {
     "change",
     "input[name='ri_wl_label_setting_margin[]']",
     function () {
-      $("input[name='ri_wl_label_setting_template']").prop("checked", false);
+      //$("input[name='ri_wl_label_setting_template']").prop("checked", false);
 
       let margin = [];
       $("input[name='ri_wl_label_setting_margin[]']").each(function (index) {
         margin.push($(this).val() + "px");
       });
       margin = margin.join(" ");
-      $(".ri_woo_labels_preview_panel .ri-woo-labels-container span").css(
-        "margin",
-        margin
-      );
-      $(".woo-labels-ri_wl_label_setting_predefined_colors span").css(
+      $(".ri_woo_labels_preview_panel .ri-wl_span-container").css(
         "margin",
         margin
       );
@@ -365,15 +381,17 @@ jQuery(document).ready(function ($) {
         false
       );
 
-      $(".radio-wrapper .woo-labels-ri_wl_label_setting_template__span").css(
+      backgroundColorChanged(color);
+
+      /* $(".radio-wrapper .woo-labels-ri_wl_label_setting_template__span").css(
         "background-color",
         color
       );
 
-      $(".ri_woo_labels_preview_panel .ri-woo-labels-container span").css(
+      $(".ri_woo_labels_preview_panel .ri-wl_span-container").css(
         "background-color",
         color
-      );
+      ); */
     },
   });
 
@@ -398,7 +416,7 @@ jQuery(document).ready(function ($) {
           color
         );
 
-        $(".ri_woo_labels_preview_panel .ri-woo-labels-container span").css(
+        $(".ri_woo_labels_preview_panel .ri-wl_span-container").css(
           "color",
           color
         );

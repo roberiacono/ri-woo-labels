@@ -6,10 +6,17 @@ if ( ! class_exists( 'Ri_WL_Label_View' ) ) {
 	class Ri_WL_Label_View {
 
 		public function get_html( $label_id ) {
-			$text  = get_post_meta( $label_id, '_ri_wl_label_setting_text', true );
-			$text  = $this->replace_variables_in_text( $text );
-			$style = $this->get_style( $label_id );
-			$html  = '<span class="" style="' . esc_attr( $style ) . '">' . $text . '</span>';
+			$text     = get_post_meta( $label_id, '_ri_wl_label_setting_text', true );
+			$text     = $this->replace_variables_in_text( $text );
+			$template = get_post_meta( $label_id, '_ri_wl_label_setting_template', true );
+			$style    = $this->get_style( $label_id );
+
+			$inline_css = '.ri-wl_span-container.' . $template . '.' . $template . '-' . $label_id . ':before {
+				border-color: ' . get_post_meta( $label_id, '_ri_wl_label_setting_background_color', true ) . ';
+			}';
+			echo '<style>' . esc_html( $inline_css ) . '</style>';
+
+			$html = '<div class="ri-wl_span-container ' . $template . ' ' . $template . '-' . $label_id . '" style="' . $style . '"><span>' . $text . '</span></div>';
 			return $html;
 		}
 

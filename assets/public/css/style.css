@@ -1,0 +1,21 @@
+.ri-wl_span-container.template-5 {
+    background: #e9d8fd;
+	text-align: center;
+	display: inline-block;
+	height: 30px;
+	line-height: 30px;
+	border-radius: 3px;
+	padding: 0 10px;
+	position: relative;
+}
+.ri-wl_span-container.template-5:before {
+	border-left-color: transparent !important;
+	display: inline-block;
+	content: "";
+	position: absolute;
+	right: -20px;
+	top: 0;
+	border: 9px solid transparent;
+	border-width: 15px 15px;
+	transform: rotate(180deg);
+}

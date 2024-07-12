@@ -106,5 +106,7 @@ if ( Ri_WL_Helpers::is_new_page() ) {
 		gap: 0.5rem;
 	}
 
+  
+
 
 </style>

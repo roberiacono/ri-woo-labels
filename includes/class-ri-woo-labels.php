@@ -130,13 +130,17 @@ if ( ! class_exists( 'Ri_Woo_Labels' ) ) {
 					);
 					wp_enqueue_script( 'ri-woo-labels-meta-box' );
 
+					wp_register_style( 'ri-woo-labels-style', RI_WOO_LABELS_PLUGIN_URL . 'assets/public/css/style.css', array(), RI_WOO_LABELS_PLUGIN_VERSION );
+					wp_enqueue_style( 'ri-woo-labels-style' );
+
 					// wp_enqueue_script( 'ri-woo-labels-color-picker', RI_WOO_LABELS_PLUGIN_URL . 'assets/admin/js/color-picker.js', array( 'wp-color-picker' ), RI_WOO_LABELS_PLUGIN_VERSION, true );
 				}
 			}
 		}
 
 		public function maybe_enqueue_scripts() {
-
+			wp_register_style( 'ri-woo-labels-style', RI_WOO_LABELS_PLUGIN_URL . 'assets/public/css/style.css', array(), RI_WOO_LABELS_PLUGIN_VERSION );
+			wp_enqueue_style( 'ri-woo-labels-style' );
 			/*
 			if ( get_option( 'ri_wth_load_styles' ) ) {
 				wp_register_style( 'ri-wth-style', RI_WOO_LABELS_PLUGIN_URL . 'public/css/style.css', array(), RI_WOO_LABELS_PLUGIN_VERSION );
