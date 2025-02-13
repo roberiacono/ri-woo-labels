@@ -66,7 +66,10 @@ if ( ! class_exists( 'Ri_Woo_Labels' ) ) {
 			add_action( 'plugins_loaded', array( $this, 'on_plugins_loaded' ) );
 			add_action( 'init', array( $this, 'load_textdomain' ) );
 
-			add_filter( 'plugin_action_links_' . plugin_basename( RI_WOO_LABELS_PLUGIN_URL ), array( $this, 'add_settings_link' ) );
+			// add_filter( 'plugin_action_links_' . plugin_basename( RI_WOO_LABELS_PLUGIN_URL ), array( $this, 'add_settings_link' ) );
+
+			// disable default on sale label of Woocommerce
+			add_filter( 'woocommerce_sale_flash', '__return_false' );
 		}
 
 		public function on_plugins_loaded() {
@@ -98,21 +101,14 @@ if ( ! class_exists( 'Ri_Woo_Labels' ) ) {
 		}
 
 		public function activate_plugin() {
-			$this->set_initial_settings();
+			// $this->set_initial_settings();
 		}
 
+		/*
 		public function set_initial_settings() {
-			/*
-			$initial_settings = RI_WTH_Settings::get_intial_settings();
 
-			// set default initial settings
-			foreach ( $initial_settings as $key => $value ) {
-				if ( false === get_option( $key ) ) {
-					add_option( $key, $value );
-				}
-			} */
 		}
-
+		*/
 		public function admin_enqueue_scripts( $hook_suffix ) {
 			if ( is_admin() && in_array( $hook_suffix, array( 'post.php', 'post-new.php' ) ) ) {
 				$screen = get_current_screen();
@@ -141,37 +137,13 @@ if ( ! class_exists( 'Ri_Woo_Labels' ) ) {
 		public function maybe_enqueue_scripts() {
 			wp_register_style( 'ri-woo-labels-style', RI_WOO_LABELS_PLUGIN_URL . 'assets/public/css/style.css', array(), RI_WOO_LABELS_PLUGIN_VERSION );
 			wp_enqueue_style( 'ri-woo-labels-style' );
-			/*
-			if ( get_option( 'ri_wth_load_styles' ) ) {
-				wp_register_style( 'ri-wth-style', RI_WOO_LABELS_PLUGIN_URL . 'public/css/style.css', array(), RI_WOO_LABELS_PLUGIN_VERSION );
-			}
-			if ( get_option( 'ri_wth_load_scripts' ) ) {
-				wp_register_script( 'ri-wth-script', RI_WOO_LABELS_PLUGIN_URL . 'public/js/script.js', array( 'jquery' ), RI_WOO_LABELS_PLUGIN_VERSION, true );
-				wp_localize_script(
-					'ri-wth-script',
-					'ri_wth_scripts',
-					array(
-						'ajax_url'   => admin_url( 'admin-ajax.php' ),
-						'thank_you'  => __( '✅ Thank you for your feedback!', 'ri-was-this-helpful' ),
-						'submitting' => __( '⏳ Submitting...', 'ri-was-this-helpful' ),
-						'postId'     => get_the_ID(),
-					)
-				);
-			}
-			if ( RI_WTH_Functions::should_display_box() ) {
-				if ( get_option( 'ri_wth_load_styles' ) ) {
-					wp_enqueue_style( 'ri-wth-style' );
-				}
-				if ( get_option( 'ri_wth_load_scripts' ) ) {
-					wp_enqueue_script( 'ri-wth-script' );
-				}
-			} */
 		}
 
+		/*
 		public function add_settings_link( $links ) {
 			$url           = get_admin_url() . 'admin.php?page=ri-woo-labels-settings';
 			$settings_link = array( '<a href="' . $url . '">' . esc_html( __( 'Settings', 'ri-woo-labels' ) ) . '</a>' );
 			return array_merge( $settings_link, $links );
-		}
+		} */
 	}
 }

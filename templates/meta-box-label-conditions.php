@@ -11,7 +11,7 @@ $value = get_post_meta( $post_id, '_type_meta_key', true );
 $conditions = get_post_meta( $post_id, '_ri_woo_labels_conditions', true );
 $conditions = maybe_unserialize( $conditions ); */
 $conditions = Ri_WL_CPT_Conditions::get_label_conditions( $post_id );
-print_r( $conditions );
+// print_r( $conditions );
 ?>
 <div id="conditions-wrapper">
 	<?php

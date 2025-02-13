@@ -130,26 +130,36 @@ jQuery(document).ready(function ($) {
   );
 
   function update_position(selected) {
-    $(".ri_woo_labels_preview_panel .ri_wl_div_wrapper .ri-wl_span-container")
+    $(
+      ".ri_woo_labels_preview_panel .ri_wl_div_wrapper .ri-woo-labels-wrapper-container "
+    )
       .css("top", "")
       .css("left", "")
       .css("bottom", "")
       .css("right", "");
 
     if (selected === "top-left") {
-      $(".ri_woo_labels_preview_panel .ri_wl_div_wrapper .ri-wl_span-container")
+      $(
+        ".ri_woo_labels_preview_panel .ri_wl_div_wrapper .ri-woo-labels-wrapper-container"
+      )
         .css("top", 0)
         .css("left", 0);
     } else if (selected === "top-right") {
-      $(".ri_woo_labels_preview_panel .ri_wl_div_wrapper .ri-wl_span-container")
+      $(
+        ".ri_woo_labels_preview_panel .ri_wl_div_wrapper .ri-woo-labels-wrapper-container"
+      )
         .css("top", 0)
         .css("right", 0);
     } else if (selected === "bottom-right") {
-      $(".ri_woo_labels_preview_panel .ri_wl_div_wrapper .ri-wl_span-container")
+      $(
+        ".ri_woo_labels_preview_panel .ri_wl_div_wrapper .ri-woo-labels-wrapper-container"
+      )
         .css("bottom", 0)
         .css("right", 0);
     } else if (selected === "bottom-left") {
-      $(".ri_woo_labels_preview_panel .ri_wl_div_wrapper .ri-wl_span-container")
+      $(
+        ".ri_woo_labels_preview_panel .ri_wl_div_wrapper .ri-woo-labels-wrapper-container"
+      )
         .css("bottom", 0)
         .css("left", 0);
     }
@@ -429,7 +439,7 @@ jQuery(document).ready(function ($) {
     var currentText = $(this).val();
 
     // Setting the Div content
-    $(".ri_woo_labels_preview_panel .ri-woo-labels-container span").text(
+    $(".ri_woo_labels_preview_panel .ri-wl_span-container span").text(
       currentText
     );
   });

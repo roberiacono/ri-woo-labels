@@ -10,6 +10,7 @@ if ( ! class_exists( 'Ri_WL_Admin_Menu' ) ) {
 
 		public function add_submenu_pages() {
 
+			/*
 			add_submenu_page(
 				'edit.php?post_type=woo-label',
 				__( 'Woo Labels Settings', 'ri-woo-labels' ),
@@ -17,7 +18,7 @@ if ( ! class_exists( 'Ri_WL_Admin_Menu' ) ) {
 				'manage_options',
 				'ri-woo-labels-settings',
 				array( $this, 'render_settings_page' ),
-			);
+			); */
 		}
 
 		public function render_settings_page() {

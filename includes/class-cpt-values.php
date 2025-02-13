@@ -15,38 +15,45 @@ if ( ! class_exists( 'Ri_WL_CPT_Values' ) ) {
 					'type'    => 'radio',
 					'label'   => __( 'Template', 'ri-woo-labels' ),
 					'options' => array(
-						'template-1' => array(
+						'template-1'      => array(
 							'label' => __( 'Template 1', 'ri-woo-labels' ),
 							'style' => array(
 								'padding'       => '1.2px 12px 1.2px 12px',
 								'border-radius' => '15px 15px 15px 15px',
 							),
 						),
-						'template-2' => array(
+						'template-2'      => array(
 							'label' => __( 'Template 2', 'ri-woo-labels' ),
 							'style' => array(
 								'padding'   => '1.2px 12px 1.2px 12px',
 								'clip-path' => 'polygon(10% 0%, 90% 0%, 100% 100%, 0% 100%)',
 							),
 						),
-						'template-3' => array(
+						'template-3'      => array(
 							'label' => __( 'Template 3', 'ri-woo-labels' ),
 							'style' => array(
 								'padding'       => '1.2px 12px 1.2px 12px',
 								'border-radius' => '1.2px 12px 1.2px 12px',
 							),
 						),
-						'template-4' => array(
+						'template-4'      => array(
 							'label' => __( 'Template 4', 'ri-woo-labels' ),
 							'style' => array(
 								'padding'       => '1.2px 12px 1.2px 12px',
 								'border-radius' => '12px 1.2px 12px 1.2px',
 							),
 						),
-						'template-5' => array(
+						'template-5'      => array(
 							'label' => __( 'Template 5', 'ri-woo-labels' ),
 							'style' => array(),
 						),
+						'template-circle' => array(
+							'label' => __( 'Circle', 'ri-woo-labels' ),
+							'style' => array(
+								'padding' => '5px 5px 5px 5px',
+							),
+						),
+
 					),
 				),
 				'ri_wl_label_setting_predefined_colors' => array(

@@ -10,10 +10,11 @@ $default_values = new Ri_WL_CPT_Values();
 print_r( $default_values->get_default_values() ); */
 $meta_box_custom_style = Ri_WL_CPT_Values::get_meta_box_settings_style_values();
 
+/*
 echo '<pre>';
 echo 'ri_wl_label_setting_border_radius: ';
 var_dump( get_post_meta( $post->ID, '_ri_wl_label_setting_border_radius', true ) );
-echo '</pre>';
+echo '</pre>'; */
 
 $is_new_label = false;
 if ( Ri_WL_Helpers::is_new_page() ) {

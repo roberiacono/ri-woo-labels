@@ -11,11 +11,6 @@ print_r( $default_values->get_default_values() ); */
 $meta_box_settings = Ri_WL_CPT_Values::get_meta_box_settings_values();
 
 $label_setting_where = get_post_meta( $post->ID, '_ri_wl_label_setting_where', true );
-echo '<pre>';
-var_dump( 'ri_wl_label_setting_where: ' . $label_setting_where );
-var_dump( 'ri_wl_label_setting_position: ' . get_post_meta( $post->ID, '_ri_wl_label_setting_position', true ) );
-var_dump( 'ri_wl_label_setting_template: ' . get_post_meta( $post->ID, '_ri_wl_label_setting_template', true ) );
-echo '</pre>';
 
 $is_new_label = false;
 if ( Ri_WL_Helpers::is_new_page() ) {
